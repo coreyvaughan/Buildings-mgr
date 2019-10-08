@@ -60,28 +60,19 @@ AddPermission(p,b) == \*Person b granted access permissions to building b*\
     /\ p \in register
     /\ p \in DOMAIN permission
     /\ b  \in Buildings
-    /\ permission' = [permission EXCEPT ![p] = @ \union {b}] \*update permissions of p to include b*\
+    /\ permission' = [permission EXCEPT ![p] = @\union{b}] \*update permissions of p to include b*\
                                                            \* ![p] = new value of p *\
                                                            \* @ = old value of p *\
     /\ UNCHANGED <<register, location>>
 
-
 DeRegister(p) == \*person b removed from register*\
     /\ p \in register
-    /\ p \in DOMAIN permission  \*person p has permissions*\
-    /\ p \in DOMAIN location    \*person p has a location*\
     /\ register' = register \ {p}
-    /\ permission' = [ x \in DOMAIN permission \ {p} |-> permission[x] ] \*for everyone that has permissions (except p) keep them the same*\
-    /\ location' = [ x \in DOMAIN location \ {p} |-> location[x]]
-        
+    /\ UNCHANGED <<permission, location>>
     
-RevokePermissions(p,b) == \*revoke permissions to  building b for person p*\
-    /\ p \in register 
-    /\ p \in DOMAIN permission
-    /\ b \in location
-    /\ permission' = [permission EXCEPT ![p] = @ \ {b}]
-    /\ UNCHANGED <<register, location>>
+ \*revoke permissions to  building b for person p*\
     
+
 
 
 ----------
@@ -90,11 +81,9 @@ Next == \E p \in People, b \in Buildings : \* There is a person and a builing th
     \/ Enter(p,b)     \* the person can enter the building
     \/ Leave(p,b)     \* the person can leave the building
     \/ AddPermission(p,b)
-    \/ DeRegister(p)
-    \/ RevokePermissions(p,b)
 
 =============================================================================
 \* Modification History
-\* Last modified Tue Oct 08 13:50:26 BST 2019 by student
+\* Last modified Tue Oct 08 13:11:47 BST 2019 by student
 \* Last modified Wed Oct 02 12:39:11 BST 2019 by alun
 \* Created Wed Oct 02 12:01:41 BST 2019 by alun
